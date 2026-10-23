@@ -1,0 +1,44 @@
+# Netlify serves the built bundle and proxies the API so the browser stays
+# same-origin with it. That is what lets the service worker's probe and the
+# idempotent writes work without CORS preflights.
+[build]
+  command = "pnpm build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  PNPM_VERSION = "11"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://fieldkit-api-production.up.railway.app/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/__control"
+  to = "https://fieldkit-api-production.up.railway.app/__control"
+  status = 200
+  force = true
+
+# Single-page app: every other path is the shell.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+
+[[headers]]
+  for = "/precache.json"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

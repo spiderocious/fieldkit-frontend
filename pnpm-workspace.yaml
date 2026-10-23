@@ -1,0 +1,6 @@
+packages:
+  - .
+  - qa
+# esbuild runs a postinstall script to link its platform binary; nothing else may run one.
+allowBuilds:
+  esbuild: true

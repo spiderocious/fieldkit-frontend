@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.netlify/
+qa/artifacts/raw/
+qa/artifacts/raw-video/
+qa/report/
+qa/artifacts/**/*.webm
+qa/node_modules/
+.DS_Store

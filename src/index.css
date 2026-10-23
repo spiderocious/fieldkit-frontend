@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+
+/* Design tokens, taken from the DevFest Akure 2026 deck: Google brand 500s,
+   their pastels, off-white surfaces and a near-black ink. Light only; the
+   app is used outdoors and on a projector. */
+@theme {
+  --color-brand: #4285f4;
+  --color-brand-strong: #2f6fd9;
+  --color-brand-pastel: #c3ecf6;
+  --color-blue: #4285f4;
+  --color-green: #34a853;
+  --color-yellow: #fbbc04;
+  --color-red: #ea4335;
+  --color-blue-pastel: #c3ecf6;
+  --color-green-pastel: #ccf6c5;
+  --color-yellow-pastel: #ffe7a5;
+  --color-red-pastel: #f8d8d8;
+  --color-ink: #1e1e1e;
+  --color-ink-soft: #52555a;
+  --color-ink-muted: #7a7d82;
+  --color-line: #1e1e1e;
+  --color-line-soft: #d8d8d8;
+  --color-surface: #f0f0f0;
+  --color-surface-2: #e3e3e3;
+  --color-success: #34a853;
+  --color-warning: #fbbc04;
+  --color-warning-strong: #7a5a00;
+  --color-danger: #ea4335;
+
+  --radius-lg: 22px;
+  --radius-md: 14px;
+
+  --font-sans: 'Google Sans Flex', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+/* Safe areas on phones with a notch. */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
