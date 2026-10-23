@@ -6,7 +6,7 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   globalSetup: './tests/global-setup.ts',
-  timeout: 420_000,
+  timeout: 900_000, // live runs cross a real network; local runs finish in a third of this
   expect: { timeout: 15_000 },
   fullyParallel: false,
   workers: 1,

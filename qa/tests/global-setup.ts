@@ -9,6 +9,8 @@ const FIELDKIT_DB = process.env.FIELDKIT_DATABASE_URL ?? 'postgres://fieldkit:fi
 const BACKEND = path.resolve(import.meta.dirname, '..', '..', 'fieldkit', 'backend');
 
 export default function globalSetup(): void {
+  // Against a deployment there is nothing local to reset; shop names carry a run stamp.
+  if (process.env.FIELDKIT_WEB) return;
   execFileSync(PSQL, [FIELDKIT_DB, '-v', 'ON_ERROR_STOP=1', '-c', 'TRUNCATE photos, visits, idempotency_keys, telemetry_events'], { stdio: 'inherit' });
   execFileSync('go', ['run', './cmd/seed'], { cwd: BACKEND, stdio: 'inherit', env: { ...process.env, DATABASE_URL: FIELDKIT_DB } });
 }
