@@ -73,7 +73,7 @@ export function VisitsListPage() {
       }
     >
       <Show when={fromCache}>
-        <p className="rounded-[var(--radius-md)] bg-yellow-pastel px-3.5 py-2 text-sm text-ink">Showing the last copy this device received. The server could not be reached.</p>
+        <p className="rounded-[var(--radius-md)] bg-yellow-pastel px-3.5 py-2 text-sm text-ink">Showing the last list this phone received.</p>
       </Show>
       <Show
         when={visits !== undefined && visits.length > 0}
@@ -82,7 +82,7 @@ export function VisitsListPage() {
             <Empty
               icon={<MapPin className="size-6" />}
               title="No visits on this device yet"
-              body="Start a visit. It saves here first and reaches the server when there is signal."
+              body="Start a visit. It saves on this phone and sends when there is signal."
             />
           </Show>
         }

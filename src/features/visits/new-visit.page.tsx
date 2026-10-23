@@ -49,7 +49,7 @@ export function NewVisitPage() {
   const storage = useQuery({ queryKey: ['storage'], queryFn: storageStatus, staleTime: 10_000 });
   const storageBlocked =
     storage.data && storage.data.quota > 0 && storage.data.ratio >= PHOTO_STOP_RATIO
-      ? `Storage is ${Math.round(storage.data.ratio * 100)}% full. Forms still save; photos are paused until the queue drains.`
+      ? `This phone is ${Math.round(storage.data.ratio * 100)}% full. Visits still save; photos are paused until your queue has sent.`
       : null;
 
   function locate() {
@@ -128,7 +128,7 @@ export function NewVisitPage() {
         <Button type="submit" size="lg" loading={saving} className="mt-2">
           Save visit
         </Button>
-        <p className="text-center text-xs text-ink-muted">Saves to this device first. Sending happens in the background.</p>
+        <p className="text-center text-xs text-ink-muted">Saves on this phone first and sends when there is signal.</p>
       </form>
     </Page>
   );

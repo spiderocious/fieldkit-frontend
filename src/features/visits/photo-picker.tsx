@@ -73,7 +73,7 @@ export function PhotoPicker({ photos, onChange, blockedReason, max = 4 }: Readon
                 <img src={p.url} alt="" className="aspect-[4/3] w-full object-cover" />
                 <div className="flex items-center justify-between px-2 py-1.5 text-[11px] text-ink-soft">
                   <span>
-                    {formatBytes(p.originalBytes)} → {formatBytes(p.bytes)} · {p.elapsedMs}ms
+                    {formatBytes(p.bytes)} · ready
                   </span>
                   <button type="button" onClick={() => remove(p.localId)} aria-label="Remove photo" className="rounded p-1 text-ink-muted hover:text-red">
                     <Trash2 className="size-3.5" />
@@ -93,7 +93,7 @@ export function PhotoPicker({ photos, onChange, blockedReason, max = 4 }: Readon
         disabled={Boolean(blockedReason) || photos.length >= max}
         onClick={() => input.current?.click()}
       >
-        {busy ? 'Compressing off the main thread' : 'Add photo'}
+        {busy ? 'Preparing photo' : 'Add photo'}
       </Button>
     </div>
   );

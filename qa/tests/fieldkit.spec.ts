@@ -76,8 +76,8 @@ test('fieldkit: online, offline, reload, chaos, conflict', async () => {
   await page.getByRole('button', { name: 'Use my location' }).click();
   await expect(page.getByTestId('location')).toBeVisible();
   await page.locator('input[type=file]').setInputFiles(path.join(FIXTURES, 'shop-front.jpg'));
-  await expect(page.getByText(/→ .* · \d+ms/)).toBeVisible();
-  await say.result('Compressed off the main thread; the label shows before → after bytes and the time it took.');
+  await expect(page.getByText(/KB · ready/)).toBeVisible();
+  await say.result('Compressed off the main thread: a 12 MP photo is now a few hundred kilobytes.');
   await shot('new-visit-filled-online');
   await say.caption('Saving. The form returns as soon as IndexedDB has it; sending happens in the background.');
   await page.getByRole('button', { name: 'Save visit' }).click();
@@ -97,7 +97,7 @@ test('fieldkit: online, offline, reload, chaos, conflict', async () => {
   await say.caption('Opening the sync panel and probing the server by hand');
   await page.getByTestId('status-strip').click();
   await page.getByTestId('sync-now').click();
-  await expect(page.getByTestId('probe-state')).toHaveText('server unreachable');
+  await expect(page.getByTestId('probe-state')).toHaveText('no connection');
   await say.result('The probe failed, so the app knows it is offline. It did not trust the browser flag.');
   await shot('sync-panel-offline');
   await page.getByRole('link', { name: 'Back' }).click();
@@ -114,7 +114,7 @@ test('fieldkit: online, offline, reload, chaos, conflict', async () => {
     await page.getByLabel('Owner phone').fill(v[2]!);
     if (i === 0) {
       await page.locator('input[type=file]').setInputFiles(path.join(FIXTURES, 'shelf.jpg'));
-      await expect(page.getByText(/→ .* · \d+ms/)).toBeVisible();
+      await expect(page.getByText(/KB · ready/)).toBeVisible();
       await shot('new-visit-offline-with-photo');
     }
     await page.getByRole('button', { name: 'Save visit' }).click();
@@ -139,8 +139,8 @@ test('fieldkit: online, offline, reload, chaos, conflict', async () => {
   await shot('home-reloaded-offline');
   await say.caption('Opening the offline visit: the photo is read from the device');
   await page.getByTestId('visit-row').filter({ hasText: shops.offline1 }).click();
-  await expect(page.getByText('on device')).toBeVisible();
-  await say.result('The photo badge says "on device": bytes in OPFS, not yet on the server.');
+  await expect(page.getByText('on this phone')).toBeVisible();
+  await say.result('The photo badge says "on this phone": bytes in OPFS, not yet on the server.');
   await shot('detail-offline-photo-on-device');
   await page.getByRole('link', { name: 'Back' }).click();
 
@@ -156,7 +156,7 @@ test('fieldkit: online, offline, reload, chaos, conflict', async () => {
   await say.caption('Reconnected. The online event triggered a drain; every request got a 500.');
   await page.getByTestId('status-strip').click();
   await page.getByTestId('sync-now').click();
-  await expect(page.getByTestId('retrying-row').filter({ hasText: 'visit.create' }).first()).toContainText(/attempt [1-9] · chaos_injected/);
+  await expect(page.getByTestId('retrying-row').filter({ hasText: 'New visit' }).first()).toContainText(/Attempt [1-9] · Server error/);
   await say.result('Each record shows its attempt count, the server reason, its key, and when it will try again.', 2600);
   await shot('sync-panel-chaos-retrying');
 
@@ -206,7 +206,7 @@ test('fieldkit: online, offline, reload, chaos, conflict', async () => {
   await shot('detail-version-conflict');
   await say.caption('Keep mine: the same fields are sent again against the server’s version');
   await page.getByRole('button', { name: 'Keep mine' }).click();
-  await expect(page.getByTestId('visit-state')).toHaveText(/Synced · v3/);
+  await expect(page.getByTestId('visit-state')).toHaveText('Synced');
   await say.result('Synced at version 3. No silent overwrite in either direction.');
   await shot('detail-conflict-resolved');
 

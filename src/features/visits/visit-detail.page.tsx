@@ -15,6 +15,8 @@ import { formatBytes, formatDateTime } from '@ui/format';
 import { InlineError } from '@ui/inline-error';
 import { Page } from '@ui/page';
 
+import { intentLabel, reasonLabel } from '@features/sync-status/labels';
+
 import { useLocalVisit } from './use-visits';
 import type { Visit } from './visits.api';
 import { intentsFor, keepMine, takeTheirs, updateVisitLocally, visitSyncState } from './visits.repo';
@@ -43,7 +45,7 @@ function LocalPhotoThumb({ photo }: Readonly<{ photo: LocalPhoto }>) {
         <span>
           {formatBytes(photo.bytes)} · {photo.width}×{photo.height}
         </span>
-        <Show when={photo.uploaded_at !== null} fallback={<Badge tone="warning">on device</Badge>}>
+        <Show when={photo.uploaded_at !== null} fallback={<Badge tone="warning">on this phone</Badge>}>
           <Badge tone="success" icon={<Check className="size-3" />}>
             uploaded
           </Badge>
@@ -99,7 +101,7 @@ export function VisitDetailPage() {
           <div className="flex items-center justify-between">
             <CardTitle>Visit</CardTitle>
             <Badge tone={state === 'synced' ? 'success' : state === 'pending' ? 'warning' : 'danger'} data-testid="visit-state">
-              {state === 'synced' ? `Synced · v${visit?.version}` : state === 'pending' ? 'Waiting to send' : state === 'failed' ? 'Needs attention' : 'Conflict'}
+              {state === 'synced' ? 'Synced' : state === 'pending' ? 'Waiting to send' : state === 'failed' ? 'Needs attention' : 'Conflict'}
             </Badge>
           </div>
           <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
@@ -118,7 +120,7 @@ export function VisitDetailPage() {
           <Card className="flex flex-col gap-3 border-red" data-testid="conflict-panel">
             <CardTitle className="text-red">Someone else changed this visit</CardTitle>
             <p className="text-sm text-ink-soft">
-              Your edit was based on version {intents.update?.baseVersion}; the server now has version {conflict?.version}. Choose which copy to keep.
+              Someone else changed this visit while you were editing. Choose which copy to keep.
             </p>
             <div className="grid grid-cols-2 gap-2 text-sm">
               <div className="rounded-[var(--radius-md)] bg-surface-2 p-3">
@@ -163,7 +165,7 @@ export function VisitDetailPage() {
                 r ? (
                   <div key={r.id} className="flex items-center justify-between text-sm">
                     <span className="text-ink-soft">
-                      {r.type} · {r.lastReason}
+                      {intentLabel(r.type)} · {reasonLabel(r.lastReason)}
                     </span>
                     <Button
                       size="sm"
@@ -199,7 +201,7 @@ export function VisitDetailPage() {
             <Field label="Owner phone" name="phone" type="tel" value={phone ?? visit?.phone ?? ''} onChange={(e) => setPhone(e.target.value)} />
             <InlineError message={saveError} />
             <Show when={saved}>
-              <p className="text-sm text-green">Saved on this device. Sending in the background.</p>
+              <p className="text-sm text-green">Saved. It will send when there is signal.</p>
             </Show>
             <Button type="submit" variant="secondary" disabled={ownerName === null && phone === null}>
               Save changes
